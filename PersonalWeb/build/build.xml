@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--    travelnow.com core build.xml    -->
+<project name="personalweb" default="build.all" basedir=".." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property environment="env"/> <!--  Environment variables used  -->
+    <property name="env.HOSTNAME"   value="${env.COMPUTERNAME}"/>
+    <property name="env.CATALINA_HOME" value="${env.CATALINA_HOME}" />
+    <property name="env.JAVA_HOME"  value="${env.JAVA_HOME}"/>
+
+    <property file="${basedir}/build/build.properties"/>
+
+    <path id="personalweb.classpath"> <!-- project classpath -->
+        <pathelement path="${build.dir}/builds/app"/>
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <presetdef name="default.personalweb.javac">
+        <javac srcdir="${src.dir}:${src-ian.dir}"
+               source="6"
+               target="6"
+               destdir="${build.dir}/builds/app"
+               debug="${compile.debug}"
+               deprecation="${compile.deprecation}"
+               optimize="${compile.optimize}"
+               classpathref="personalweb.classpath"
+               encoding="UTF-8"
+               includeantruntime="false"/>
+    </presetdef>
+
+    <!-- deploy.local target Deploys Compiled Source into the distribution folder.
+        The preconditions for this deployment are as follows
+        0. Test src-ian for code compliance (test.warnings)
+        1. Creation of all jar files (done as a dependency on jar)
+        2. Creation of Staging files (done as a dependency on config-stage)
+        3. Creation of Production files (done as a dependency on config-prod)
+        4. Deploying files into the distribution folder (done inside the target itself) -->
+    <target name="deploy.local" depends="compile, jar"
+            description="Compile and deploy files for local deployment">
+        <!-- Step 4 - Deploy files into the distribution folder -->
+        <mkdir dir="${deploy.dir}" />
+
+        <!-- copy files to standard location. Don't overwrite as clean will remove these -->
+        <copy todir="${deploy.dir}" overwrite="false">
+            <fileset dir="${lib.dir}" >
+                <exclude name="nodeploy/**"/>
+            </fileset>
+        </copy>
+
+        <copy file="${build.dir}/core-classes.jar"      todir="${deploy.dir}" />
+    </target>
+
+    <!-- This target contains the list of all jar files to be created -->
+    <target name="jar" depends="core-classes.jar" />
+
+    <!-- The task core-classes.jar jars all core classes of the project -->
+    <target name="core-classes.jar">
+        <delete file="${build.dir}/core-classes.jar" quiet="true" />
+        <jar jarfile="${build.dir}/core-classes.jar" index="true" compress="false">
+            <fileset dir="${build.dir}/builds/app"/>
+
+            <!-- include any XML configuration/property files
+                 in the core hierarchy -->
+            <fileset dir="${src.dir}" includes="**/*.xml"/>
+            
+        </jar>
+    </target>
+
+    <!-- Create the war file -->
+    <target name="tnow_core.war">
+        <delete dir="${build.dir}/dist" includeEmptyDirs="true" failOnError="false" />
+        <mkdir dir="${build.dir}/dist" />
+        <war destfile="${build.dir}/dist/Personalweb.war" index="true" webxml="${jsp.dir}/WEB-INF/web.xml" compress="true">
+            <fileset dir="${jsp.dir}">
+                <exclude name="WEB-INF/**"/>
+            </fileset>
+            <webinf dir="${jsp.dir}/WEB-INF">
+                <exclude name="web.xml"/>
+                <exclude name="**/*.pj"/>
+            </webinf>
+
+            <webinf dir="${basedir}" file="${deploy.build.version}"/>
+            
+            <manifest>
+                <attribute name="Built-From-URL" value="${subversion.info.url}" />
+                <attribute name="Built-From-REV" value="${subversion.info.rev}" />
+                <attribute name="Built-By" value="${env.HOSTNAME}" />
+            </manifest>
+        </war>
+    </target>
+
+    <!-- Cleans the build and deployment folders -->
+    <target name="clean" description="Deletes the build tmp directory, the WEB-INF\lib directory, and the WEB-INF\work directory">
+        <delete includeEmptyDirs="true" failOnError="false">
+            <fileset dir="${build.dir}" />
+        </delete>
+
+        <delete includeEmptyDirs="true" failOnError="false">
+            <fileset dir="${deploy.dir}" />
+        </delete>
+    </target>
+
+    <target name="compile">
+        <depend srcDir="${src.dir}"
+                destDir="${build.dir}/builds/app"
+                cache="${build.dir}/.depend"
+                classpathref="personalweb.classpath"/>
+
+        <default.ean.javac />
+
+        <tstamp>
+            <format property="build.date" pattern="yyyy-dd-MM HH:mm:ss"/>
+        </tstamp>
+    </target>
+    
+</project>

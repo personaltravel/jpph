@@ -1,0 +1,65 @@
+<binding name="binding" package="com.personalweb.hotel.expedia.vo" trim-whitespace="true">
+
+    <mapping abstract="true" ordered="false" type-name="HotelListRequest"
+             class="com.personalweb.hotel.expedia.vo.HotelListRequest">
+        <structure map-as="HotelBaseRequest"/>
+        <value style="element" name="numberOfResults" usage="optional"
+               get-method="getNumberOfResults" set-method="setNumberOfResults"/>
+        <value style="element" name="numberOfBedrooms" usage="optional"
+               get-method="getNumberOfBedrooms" set-method="setNumberOfBedrooms"/>
+        <value style="element" name="arrivalDate" usage="optional"
+               get-method="getArrivalDate" set-method="setArrivalDate"/>
+        <value style="element" name="departureDate" usage="optional"
+               get-method="getDepartureDate" set-method="setDepartureDate"/>
+        <value style="element" name="address" usage="optional"
+               get-method="getAddress" set-method="setAddress"/>
+        <value style="element" name="city" usage="optional"
+               get-method="getCity" set-method="setCity"/>
+        <value style="element" name="stateProvinceCode" usage="optional"
+               get-method="getStateProvinceCode" set-method="setStateProvinceCode"/>
+        <value style="element" name="postalCode" usage="optional"
+               get-method="getPostalCode" set-method="setPostalCode"/>
+        <value style="element" name="countryCode" usage="optional"
+               get-method="getCountryCode" set-method="setCountryCode"/>
+        <value style="element" name="destinationId" usage="optional"
+               get-method="getDestinationId" set-method="setDestinationId"/>
+        <value style="element" name="destinationString" usage="optional"
+               get-method="getDestinationString" set-method="setDestinationString"/>
+        <structure map-as="RoomGroup" usage="optional" get-method="getRooms"
+                   set-method="setRooms" name="RoomGroup"/>
+        <value style="element" name="cacheLocation" usage="optional"
+               get-method="getCacheLocation" set-method="setCacheLocation"/>
+        <value style="element" name="cacheKey" usage="optional"
+               get-method="getCacheKey" set-method="setCacheKey"/>
+    </mapping>
+    
+    <mapping abstract="true" ordered="false" type-name="Room"
+             class="com.personalweb.hotel.expedia.vo.Room" flexible="true">
+        <value style="element" name="numberOfAdults" usage="optional"
+               get-method="getNumberOfAdults" set-method="setNumberOfAdults"/>
+        <value style="element" name="numberOfChildren" usage="optional"
+               get-method="getNumberOfChildren" set-method="setNumberOfChildren"/>
+    </mapping>
+    
+    <mapping abstract="true" ordered="false" flexible="true"
+             type-name="HotelBaseRequest" class="com.personalweb.hotel.expedia.vo.HotelBaseRequest">
+        <value style="element" name="apiKey" usage="optional" get-method="getApiKey"
+               set-method="setApiKey"/>
+         <value style="element" name="cid" usage="optional" get-method="getCid"
+               set-method="setCid"/>
+        <value style="element" name="customerIpAddress" usage="optional"
+               get-method="getCustomerIpAddress" set-method="setCustomerIpAddress"/>
+        <value style="element" name="customerSessionId" usage="optional"
+               get-method="getCustomerSessionId" set-method="setCustomerSessionId"/>
+        <value style="element" name="customerUserAgent" usage="optional"
+               get-method="getCustomerUserAgent" set-method="setCustomerUserAgent"/>
+        <value style="element" name="locale" usage="optional"
+               get-method="getLocale" set-method="setLocale"/>
+        <value style="element" name="currencyCode" usage="optional"
+               get-method="getCurrencyCode" set-method="setCurrencyCode"/>
+        <value style="element" name="minorRev" usage="optional"
+               get-method="getMinorRev" set-method="setMinorRev"/>
+    </mapping>
+
+
+</binding>    

@@ -15,10 +15,15 @@
 <form id="searchform">
     <input type="hidden" id="page-name-field" value="${pageName!""}"/>
 
-	<#if displayDetails?? && displayDetails>
-	    <div id="pageDetails">
+    <#attempt>
+        <#include "/hotel/searchBox.ftl"/>
+    <#recover>
+    </#attempt>
+
+	<#if displayDeals?? && displayDeals>
+	    <div id="dealsDiv">
 	        <#attempt>
-	            <#include "/contentPages/searchContent.ftl"/>
+	            <#include "/hotel/topDeals.ftl"/>
 	        <#recover>
 	        </#attempt>
 	    </div>
